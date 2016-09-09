@@ -1,0 +1,14 @@
+{
+  "name": "pairrot",
+  "version": "1.0.0",
+  "description": "List, join, and unjoin pairs",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "J. Chambers, A. Deschamps, C. Flanigan",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^3.0.2"
+  }
+}
