@@ -1,9 +1,12 @@
+var expect = require('chai').expect;
+var pairrot = require('../lib/pairrot');
+
 describe('Pairrot', function() {
   describe('/pair join' , function() {
     it('creates a pair when the first person joins',  function() {
-      Pairrot.join()
+      expect(pairrot.join()).to.be.true
       // invoke side effects to modify application state
-      expect('/pair join').to be_a_thing
+      // expect('/pair join').to be_a_thing
     });
 
     it('generates a pair id when a pair is created', function() {
@@ -36,10 +39,10 @@ describe('Pairrot', function() {
 
 // * when do we stop showing a pair on the list (eg 12 hours with 0 users)
 
-    it('lists pairs if any are in progress'  function() {
-      Pairrot.list()
+    it('lists pairs if any are in progress', function() {
+      // Pairrot.list()
       // read application state
-      expect('/pair join').to be_a_thing
+      // expect('/pair join').to be_a_thing
     });
   });
 });
