@@ -22,26 +22,51 @@ var pairrit = require('../lib/pairrit');
 describe('Pairrit', function() {
   describe('/pair join' , function() {
     it('creates a new pair with the given user and name',  function() {
-      var expected = { name: 'batman', participants: ['batman'] }
+      var options = {
+        userName: 'batman',
+        pairName: 'batcave',
+        pairState: undefined
+      }
 
-      var result = pairrit.join('batman', 'batman', undefined)
+      var expected = { name: 'batcave', participants: ['batman'] }
+
+      var result = pairrit.join(options)
 
       expect(result).to.deep.equal(expected);
     });
 
-    it('accepts a name for the pair to create or join', function() {
-      // expect(pairrit.join('pairrit')).to.be.true
-    });
+    it('adds a user to an existing pair',  function() {
+      var options = {
+        userName: 'alfred',
+        pairName: 'batcave',
+        pairState: {name: 'batcave', participants: ['batman'] }
+      }
 
-    it('generates a pair id (sha) when a pair is created', function() {
-      // expect(pair).to have a sha
+      var expected = {
+        name: 'batcave', 
+        participants: ['batman', 'alfred']
+      }
+
+      var result = pairrit.join(options)
+
+      expect(result).to.deep.equal(expected);
     });
 
     it('updates a pair when someone leaves', function() {
-    });
+      var options = {
+        userName: 'batman',
+        pairName: 'batcave',
+        pairState: {name: 'batcave', participants: ['batman', 'alfred']}
+      }
 
-    it('ends a pair when the last person leaves', function() {
+      var expected = { name: 'batcave', participants: ['alfred'] }
+
+      var result = pairrit.leave(options)
+
+      expect(result).to.deep.equal(expected);
     });
+  });
+});
 
 // /pair join #pairrit
 //
@@ -62,11 +87,3 @@ describe('Pairrit', function() {
 // if you're already in a pair, you see buttons "do you want to switch?" 
 
 // * when do we stop showing a pair on the list (eg 12 hours with 0 users)
-
-    it('lists pairs if any are in progress', function() {
-      // pairrit.list()
-      // read application state
-      // expect('/pair join').to be_a_thing
-    });
-  });
-});
