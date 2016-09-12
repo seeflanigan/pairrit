@@ -87,4 +87,43 @@ describe('Birdkeeper', function() {
       expect(result).to.deep.equal(expected);
     } )
   })
+
+  describe('the list command', function() {
+    function generateKey(pairChannel, pairName) {
+      return SHA256(`${pairChannel}-${pairName}`);
+    };
+
+    it('generates a meaningful report of pairs based on current state', function() {
+      var pairA = {
+        name: 'batcave',
+        participants: ['alfred', 'batman', 'batwoman', 'robin']
+      }
+
+      var pairB = {
+        name: 'wayne-manor',
+        participants: ['bruce-wayne', 'selina-kyle', 'barbara-gordon', 'kate-kane']
+      }
+
+      var currentState = {
+        [generateKey('#gotham', pairA)]: pairA,
+        [generateKey('#gotham', pairB)]: pairB
+      }
+
+      var expected = {
+        // we need to know more about what we are publishing to Slack before we can proceed here
+        // we'll probably format some kind of message, but what? data table? string?
+        // we don't know the datatype or structure of this yet
+        // will possibly report something like this
+        //
+        // Pair Name       | Participants      | Focus:
+        // ---------------------------------------------------
+        // batcave         | alfred, batman... | Issue #42
+        // wayne-manor     | bruce, selina...  | Gif Trolling
+        // ... (more rows)
+      }
+
+      // expect(result).to.equal(expected)
+    })
+  });
 });
+
