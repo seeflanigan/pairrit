@@ -65,6 +65,20 @@ describe('Pairrit', function() {
 
       expect(result).to.deep.equal(expected);
     });
+
+    it('returns undefined when the last participant leaves', function() {
+      var options = {
+        userName: 'batman',
+        pairName: 'batcave',
+        pairState: {name: 'batcave', participants: ['batman']}
+      }
+
+      var expected = undefined;
+
+      var result = pairrit.leave(options)
+
+      expect(result).to.equal(expected);
+    });
   });
 });
 

@@ -57,8 +57,7 @@ describe('Birdkeeper', function() {
       var result = birdkeeper.update(currentState, options)
 
       expect(result).to.deep.equal(expected);
-    } )
-
+    });
   });
 
   describe('it replaces an existing pair when someone leaves', function () {
@@ -85,8 +84,34 @@ describe('Birdkeeper', function() {
       var result = birdkeeper.update(currentState, options)
 
       expect(result).to.deep.equal(expected);
-    } )
-  })
+    });
+
+    it('returns a copy of app state without the pair key if there are no more participants', function(){
+      var options = {
+        userName: 'batman',
+        pairChannel: '#gotham',
+        pairName: 'batcave',
+        command: 'leave'
+      }
+
+      var key = SHA256(`${options.pairChannel}-${options.pairName}`);
+
+      var currentState = {
+        [key]: { name: 'batcave', participants: ['batman'] },
+        pair1: {},
+        pair2: {}
+      }
+
+      var expected = {
+        pair1: {},
+        pair2: {}
+      }
+
+      var result = birdkeeper.update(currentState, options);
+
+      expect(result).to.deep.equal(expected);
+    });
+  });
 
   describe('the list command', function() {
     function generateKey(pairChannel, pairName) {
