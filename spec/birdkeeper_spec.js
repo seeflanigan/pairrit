@@ -1,12 +1,12 @@
 // test dependencies
-var expect = require('chai').expect;
+const expect = require('chai').expect;
 
 // our dependencies
-var pairrit = require('../lib/pairrit');
-var birdkeeper = require('../lib/birdkeeper');
+const pairrit = require('../lib/pairrit');
+const birdkeeper = require('../lib/birdkeeper');
 
 // helpers and other libs
-var SHA256 = require('crypto-js/sha256');
+const SHA256 = require('crypto-js/sha256');
 
 // no pairs exist (pairs is empty)
 // generate a sha when the a new pair is added
@@ -17,44 +17,44 @@ var SHA256 = require('crypto-js/sha256');
 describe('Birdkeeper', function() {
   describe('adding a pair' , function() {
     it('generates a sha',  function() {
-      var options = {
+      const options = {
         userName: 'batman',
         pairChannel: '#gotham',
         pairName: 'batcave',
         command: 'join'
       }
 
-      var key = SHA256(`${options.pairChannel}-${options.pairName}`);
+      const key = SHA256(`${options.pairChannel}-${options.pairName}`);
 
-      var currentState = {};
+      const currentState = {};
 
-      var expected = {
-        [key]: { name: 'batcave', participants: ['batman'] }
+      const expected = {
+        [key]: { channel: '#gotham', name: 'batcave', participants: new Set(['batman']) }
       }
 
-      var result = birdkeeper.update(currentState, options)
+      const result = birdkeeper.update(currentState, options)
 
       expect(result).to.deep.equal(expected);
     });
 
     it('returns an updated copy of app state containing the new pair', function() {
-      var options = {
+      const options = {
         userName: 'batman',
         pairChannel: '#gotham',
         pairName: 'batcave',
         command: 'join'
       }
 
-      var key = SHA256(`${options.pairChannel}-${options.pairName}`);
+      const key = SHA256(`${options.pairChannel}-${options.pairName}`);
 
-      var currentState = { pair1: {} };
+      const currentState = { pair1: {} };
 
-      var expected = {
-        [key]: { name: 'batcave', participants: ['batman'] },
+      const expected = {
+        [key]: { channel: '#gotham', name: 'batcave', participants: new Set(['batman']) },
         pair1: {}
       }
 
-      var result = birdkeeper.update(currentState, options)
+      const result = birdkeeper.update(currentState, options)
 
       expect(result).to.deep.equal(expected);
     });
@@ -62,92 +62,92 @@ describe('Birdkeeper', function() {
 
   describe('it replaces an existing pair when someone leaves', function () {
     it('needs a better name', function() {
-      var options = {
+      const options = {
         userName: 'batman',
         pairChannel: '#gotham',
         pairName: 'batcave',
         command: 'leave'
       }
 
-      var key = SHA256(`${options.pairChannel}-${options.pairName}`);
+      const key = SHA256(`${options.pairChannel}-${options.pairName}`);
 
-      var currentState = {
+      const currentState = {
         pair1: {},
-        [key]: { name: 'batcave', participants: ['batman', 'alfred'] }
+        [key]: { channel: '#gotham', name: 'batcave', participants: new Set(['batman', 'alfred']) }
       };
 
-      var expected = {
+      const expected = {
         pair1: {},
-        [key]: { name: 'batcave', participants: ['alfred'] }
+        [key]: { channel: '#gotham', name: 'batcave', participants: new Set(['alfred']) }
       }
 
-      var result = birdkeeper.update(currentState, options)
+      const result = birdkeeper.update(currentState, options)
 
       expect(result).to.deep.equal(expected);
     });
 
     it('returns a copy of app state without the pair key if there are no more participants', function(){
-      var options = {
+      const options = {
         userName: 'batman',
         pairChannel: '#gotham',
         pairName: 'batcave',
         command: 'leave'
       }
 
-      var key = SHA256(`${options.pairChannel}-${options.pairName}`);
+      const key = SHA256(`${options.pairChannel}-${options.pairName}`);
 
-      var currentState = {
-        [key]: { name: 'batcave', participants: ['batman'] },
+      const currentState = {
+        [key]: { channel: '#gotham', name: 'batcave', participants: new Set(['batman']) },
         pair1: {},
         pair2: {}
       }
 
-      var expected = {
+      const expected = {
         pair1: {},
         pair2: {}
       }
 
-      var result = birdkeeper.update(currentState, options);
+      const result = birdkeeper.update(currentState, options);
 
       expect(result).to.deep.equal(expected);
     });
   });
 
-  describe('the list command', function() {
+  describe('listing pairs', function() {
     function generateKey(pairChannel, pairName) {
       return SHA256(`${pairChannel}-${pairName}`);
     };
 
-    it('generates a meaningful report of pairs based on current state', function() {
-      var pairA = {
+    it('list all pairs for a given channel', function() {
+      const pairA = {
+        channel: '#gotham',
         name: 'batcave',
-        participants: ['alfred', 'batman', 'batwoman', 'robin']
+        participants: new Set(['alfred', 'batman', 'batwoman', 'robin'])
       }
 
-      var pairB = {
+      const pairB = {
+        channel: '#gotham',
         name: 'wayne-manor',
-        participants: ['bruce-wayne', 'selina-kyle', 'barbara-gordon', 'kate-kane']
+        participants: new Set(['bruce-wayne', 'selina-kyle', 'barbara-gordon', 'kate-kane'])
       }
 
-      var currentState = {
-        [generateKey('#gotham', pairA)]: pairA,
-        [generateKey('#gotham', pairB)]: pairB
+      const pairC = {
+        channel: '#xaviers-school-for-gifted-youngsters',
+        name: 'x-men',
+        participants: new Set(['wolverine', 'cyclops'])
       }
 
-      var expected = {
-        // we need to know more about what we are publishing to Slack before we can proceed here
-        // we'll probably format some kind of message, but what? data table? string?
-        // we don't know the datatype or structure of this yet
-        // will possibly report something like this
-        //
-        // Pair Name       | Participants      | Focus:
-        // ---------------------------------------------------
-        // batcave         | alfred, batman... | Issue #42
-        // wayne-manor     | bruce, selina...  | Gif Trolling
-        // ... (more rows)
+      const currentState = {
+        [generateKey('#gotham', pairA.name)]: pairA,
+        [generateKey('#gotham', pairB.name)]: pairB,
+        [generateKey('#xaviers-school-for-gifted-youngsters', pairC.name)]: pairC
       }
 
-      // expect(result).to.equal(expected)
+      const expected = [pairA, pairB];
+
+      const result = birdkeeper.list(currentState, '#gotham');
+
+      expect(result).to.deep.equal(expected)
     })
   });
 });
