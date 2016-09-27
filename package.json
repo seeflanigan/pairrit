@@ -4,7 +4,7 @@
   "description": "List, join, and unjoin pairs",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --recursive spec/"
+    "test": "mocha --recursive spec/lib/"
   },
   "author": "J. Chambers, A. Deschamps, C. Flanigan",
   "license": "ISC",
