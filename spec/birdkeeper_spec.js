@@ -8,12 +8,6 @@ const birdkeeper = require('../lib/birdkeeper');
 // helpers and other libs
 const SHA256 = require('crypto-js/sha256');
 
-// no pairs exist (pairs is empty)
-// generate a sha when the a new pair is added
-// pair exists
-// pair is updated (someone joins or leaves)
-// pair ends
-
 describe('Birdkeeper', function() {
   describe('adding a pair' , function() {
     it('generates a sha',  function() {
