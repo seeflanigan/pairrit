@@ -1,4 +1,4 @@
-const router = require('../lib/index');
+const router = require('../../lib/index');
 const expect = require('chai').expect;
 const sinon = require('sinon');
 
@@ -96,3 +96,4 @@ describe('router', function () {
         it('should default to default message');
     });
 });
+
