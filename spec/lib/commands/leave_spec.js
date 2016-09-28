@@ -30,3 +30,4 @@ describe('.leave', function() {
     expect(result).to.equal(expected);
   });
 });
+
