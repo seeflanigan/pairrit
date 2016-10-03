@@ -1,5 +1,5 @@
 {
-  "name": "pairrot",
+  "name": "pairrit",
   "version": "1.0.0",
   "description": "List, join, and unjoin pairs",
   "main": "server.js",
