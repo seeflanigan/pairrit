@@ -2,7 +2,7 @@
   "name": "pairrot",
   "version": "1.0.0",
   "description": "List, join, and unjoin pairs",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "mocha --recursive spec/lib/"
   },
@@ -19,5 +19,8 @@
     "express": "^4.14.0",
     "lodash": "^4.15.0",
     "pluralize": "^3.0.0"
+  },
+  "scripts": {
+    "start": "node server.js"
   }
 }
