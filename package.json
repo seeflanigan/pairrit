@@ -4,7 +4,8 @@
   "description": "List, join, and unjoin pairs",
   "main": "server.js",
   "scripts": {
-    "test": "mocha --recursive spec/lib/"
+    "start": "NODE_ENV=dev  node server.js",
+    "test":  "NODE_ENV=test mocha --recursive spec/"
   },
   "author": "J. Chambers, A. Deschamps, C. Flanigan",
   "license": "ISC",
@@ -19,9 +20,5 @@
     "express": "^4.14.0",
     "lodash": "^4.15.0",
     "pluralize": "^3.0.0"
-  },
-  "scripts": {
-    "start": "node server.js",
-    "test": "mocha --recursive spec/"
   }
 }
