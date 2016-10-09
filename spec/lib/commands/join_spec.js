@@ -2,6 +2,20 @@ const expect = require('chai').expect;
 const join   = require('../../../lib/commands/join');
 
 describe('.join' , function() {
+  it('creates a new pair named for the user who created it',  function() {
+    const options = {
+      userName: 'batman',
+      pairChannel: '#gotham',
+      pairState: undefined
+    }
+
+    const expected = { channel: '#gotham', name: 'batman', participants: new Set(['batman']) }
+
+    const result = join(options)
+
+    expect(result).to.deep.equal(expected);
+  });
+
   it('creates a new pair with the given user and name',  function() {
     const options = {
       userName: 'batman',
