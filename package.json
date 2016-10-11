@@ -21,9 +21,5 @@
     "lodash": "^4.15.0",
     "massive": "^2.5.0",
     "pluralize": "^3.0.0"
-  },
-  "scripts": {
-    "start": "node server.js",
-    "test": "mocha --recursive spec/"
   }
 }
