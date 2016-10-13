@@ -56,7 +56,7 @@ describe('Persistence', function() {
   });
 
   describe('retrieving pairs' , function() {
-    it('returns all pairs with participants',  function() {
+    it('returns the result from the call to persistence',  function() {
       const mockPairs = [{
         channel:      '#gotham',
         hash:         'asdf12345',
@@ -87,7 +87,7 @@ describe('Persistence', function() {
         thenReturn(mockPairs);
 
       // call our method
-      var result = persistence.getPairs(channel, mockCollection);
+      var result = persistence.getPairs('gotham', mockCollection);
 
       expect(result).to.eql(mockPairs);
 
@@ -98,7 +98,47 @@ describe('Persistence', function() {
       // test verify that we return whatever
       // comes back from the mocked out call
       // here
-      // td.verify(mockFindDoc(newPair, td.matchers.isA(Function)));
+
+    });
+
+    it('retreives pairs with participants scoped to a channel', function() {
+      // stub out our datastore connection
+      var mockFindDoc = td.function()
+
+      const mockCollection = {
+        findDoc: mockFindDoc
+      };
+
+      // exercise our code under test
+      persistence.getPairs('gotham', mockCollection);
+
+      // verify our call to persistence binding
+      // with expected attributes
+      const scope = td.matchers.contains({
+        channel: 'gotham'
+      });
+
+      td.verify(mockFindDoc(scope, td.matchers.isA(Function)));
+    });
+
+    it('only fetches pairs with participants', function() {
+      // stub out our datastore connection
+      var mockFindDoc = td.function()
+
+      const mockCollection = {
+        findDoc: mockFindDoc
+      };
+
+      // exercise code under test
+      persistence.getPairs('gotham', mockCollection);
+
+      // verify our call to persistence binding
+      // with expected attributes
+      const scope = td.matchers.contains({
+        "participants <>": []
+      });
+
+      td.verify(mockFindDoc(scope, td.matchers.isA(Function)));
     });
   });
 });
