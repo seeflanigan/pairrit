@@ -1,17 +1,3 @@
-
-    //
-    // MOVE TO RETRIEVE TEST
-    // to list pairs
-    // we fetch all pairs (for a given channel)
-    // where participants is not empty
-    //
-    // MOVE TO UPDATE?
-    // For finding a pair to update, we search on the
-    // hash, and sort by the most recent record (last
-    // persisted state), and modify that copy
-    // Would this cause a race condition? Maybe...
-
-
 // testing dependencies
 const expect = require('chai').expect;
 const td     = require('testdouble');
@@ -19,6 +5,7 @@ const td     = require('testdouble');
 // our system under test
 const persistence = require('../../lib/persistence');
 
+//
 // WE ALWAYS MOVE FORWARD IN TIME
 // creating history as we go
 // all that we care about
@@ -30,6 +17,19 @@ const persistence = require('../../lib/persistence');
 // and the previous state remains intact
 // immutable over time
 //
+// GET ALL THE PAIRS
+// (for a given channel)
+// where Participants is not empty
+//
+// we only care about pairs with participants
+// because when the last person leaves
+// we store the last copy of that pair with empty
+// participants
+// and as soon as someone joins
+// we make and store a new copy
+// with the creator as the only participant
+//
+
 describe('Persistence', function() {
   describe('adding a pair to history' , function() {
     it('persists a pair to the passed in datastore',  function() {
@@ -40,7 +40,7 @@ describe('Persistence', function() {
         participants: ['alfred', 'batman', 'you', 'me']
       };
 
-      // stub out our datastore connection
+      // stub our datastore connection
       var mockSaveDoc = td.function()
 
       const mockCollection = {
@@ -56,13 +56,6 @@ describe('Persistence', function() {
   });
 
   describe('retrieving pairs' , function() {
-    // we only care about pairs with participants
-    // because when the last person leaves
-    // we store the last copy of that pair with empty
-    // participants
-    // and as soon as someone joins
-    // we make and store a new copy
-    // with the creator as the only participant
     it('returns all pairs with participants',  function() {
       const mockPairs = [{
         channel:      '#gotham',
@@ -70,15 +63,15 @@ describe('Persistence', function() {
         name:         'batcave',
         participants: ['alfred', 'batman', 'you', 'me']
       }, {
-        channel:      '#arkham',
-        hash:         '12345asdf',
-        name:         'staff',
-        participants: ['amadeus', 'jeremiah', 'harleen']
-      }, {
-        channel:      '#wayne-enterprises',
+        channel:      '#gotham',
         hash:         '0123abcde',
-        name:         'aerospace',
-        participants: ['lucius']
+        name:         'wayne-enterprises',
+        participants: ['lucius', 'bruce']
+      }, {
+        channel:      '#gotham',
+        hash:         '12345asdf',
+        name:         'arkham',
+        participants: ['amadeus', 'jeremiah', 'harleen']
       }];
 
       // stub out our datastore connection
@@ -94,7 +87,7 @@ describe('Persistence', function() {
         thenReturn(mockPairs);
 
       // call our method
-      var result = persistence.getPairs(mockCollection);
+      var result = persistence.getPairs(channel, mockCollection);
 
       expect(result).to.eql(mockPairs);
 
