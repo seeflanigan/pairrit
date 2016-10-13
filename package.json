@@ -5,14 +5,15 @@
   "main": "server.js",
   "scripts": {
     "start": "NODE_ENV=dev  node server.js",
-    "test":  "NODE_ENV=test mocha --recursive spec/"
+    "test": "NODE_ENV=test mocha --recursive spec/"
   },
   "author": "J. Chambers, A. Deschamps, C. Flanigan",
   "license": "ISC",
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^3.0.2",
-    "sinon": "^1.17.6"
+    "sinon": "^1.17.6",
+    "testdouble": "^1.8.0"
   },
   "dependencies": {
     "body-parser": "^1.15.2",
