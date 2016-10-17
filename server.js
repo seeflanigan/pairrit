@@ -8,6 +8,8 @@ var serverPort = function () {
 
 app.get('/', router);
 
-app.listen(serverPort, function () {
-  console.log('App listening on port ' + serverPort);
+const server = app.listen(serverPort, function () {
+  console.log('App listening on port %s', server.address().port );
 });
+
+module.exports = server;
