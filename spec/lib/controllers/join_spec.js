@@ -5,7 +5,11 @@ const td      = require('testdouble');
 
 describe('Join Controller', function() {
     it('serializes the result of passing params to the join command', () => {
-      const mockJoin = td.replace(subject, 'join');
+      // mock the `join` command
+      // in the controller
+      const mockJoin = td.function
+      subject.join = mockJoin;
+
       // const mockJoin = td.function();
 
       const params = {
