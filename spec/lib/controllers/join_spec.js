@@ -4,85 +4,50 @@ const subject = require('../../../lib/controllers/join');
 const td      = require('testdouble');
 
 describe('Join Controller', function() {
-    it('serializes the result of passing params to the join command', () => {
-      // mock the `join` command
-      // in the controller
-      const mockJoin = td.function
-      subject.join = mockJoin;
+  const mockRequest = {
+    body: {
+      token:         'gIkuvaNzQIHg97ATvDxqgjtO',
+      team_id:       'T0001',
+      team_domain:   'fictional_universe',
+      channel_id:    'C2147483705',
+      channel_name:  'gotham',
+      user_id:       'U2147483697',
+      user_name:     'alfred',
+      command:       '/pair',
+      text:          'join',
+      response_url:  'https://hooks.slack.com/commands/1234/5678'
+    }
+  };
 
-      // const mockJoin = td.function();
+  const mockResponse = {
+    send: () => {}
+  }
 
-      const params = {
-        token:         'gIkuvaNzQIHg97ATvDxqgjtO',
-        team_id:       'T0001',
-        team_domain:   'fictional_universe',
-        channel_id:    'C2147483705',
-        channel_name:  'gotham',
-        user_id:       'U2147483697',
-        user_name:     'alfred',
-        command:       '/pair',
-        text:          'join',
-        response_url:  'https://hooks.slack.com/commands/1234/5678'
-      };
+  it('serializes the result of passing params to the join command', () => {
+    // determine how to mock out `pairrit.join`
+    // using `testdouble.js`
+    // in this context
+    //
 
-      const message = 'Successful result message!';
+    const message = 'Successful result message!';
 
-      td.when(mockJoin(td.matchers.anything()))
-        .thenReturn(message);
+    const expected = JSON.stringify(message);
 
-      const expected = JSON.stringify(message);
+    expect(subject(mockRequest, mockResponse)).to.deep.equal(expected);
+  });
 
-      expect(subject(params)).to.deep.equal(expected);
-    });
+  it('defaults pairName to user_name', () => {
+    const expected = JSON.stringify('asdf');
 
-    it('defaults pairName to user_name', () => {
-      const mockJoin = td.replace(subject.pairrit, 'join');
+    expect(subject(mockRequest, mockResponse)).to.deep.equal(expected);
+  });
 
-      const params = {
-        token:         'gIkuvaNzQIHg97ATvDxqgjtO',
-        team_id:       'T0001',
-        team_domain:   'fictional_universe',
-        channel_id:    'C2147483705',
-        channel_name:  'gotham',
-        user_id:       'U2147483697',
-        user_name:     'alfred',
-        command:       '/pair',
-        text:          'join',
-        response_url:  'https://hooks.slack.com/commands/1234/5678'
-      };
+  it('passes the first argument provided to command as pairName', () => {
+    const message = 'Welcome to the `batcave` pair!';
 
-      td.when(mockJoin(td.matchers.anything()))
-      .thenReturn({});
+    const expected = JSON.stringify(message);
 
-      const expected = JSON.stringify('asdf');
-
-      expect(subject(params)).to.deep.equal(expected);
-    });
-
-    it('passes the first argument provided to command as pairName', () => {
-      const mockJoin = td.replace(subject.pairrit, 'join');
-
-      const params = {
-        token:         'gIkuvaNzQIHg97ATvDxqgjtO',
-        team_id:       'T0001',
-        team_domain:   'fictional_universe',
-        channel_id:    'C2147483705',
-        channel_name:  'gotham',
-        user_id:       'U2147483697',
-        user_name:     'alfred',
-        command:       '/pair',
-        text:          'join batcave',
-        response_url:  'https://hooks.slack.com/commands/1234/5678'
-      };
-
-      const message = 'Welcome to the `batcave` pair!';
-
-      td.when(mockJoin(td.matchers.anything()))
-      .thenReturn(message);
-
-      const expected = JSON.stringify(message);
-
-      expect(subject(params)).to.deep.equal(expected);
-    });
+    expect(subject(mockRequest, mockResponse)).to.deep.equal(expected);
+  });
 });
 
