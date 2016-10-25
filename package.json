@@ -13,6 +13,7 @@
     "chai": "^3.5.0",
     "mocha": "^3.0.2",
     "sinon": "^1.17.6",
+    "supertest": "^2.0.0",
     "testdouble": "^1.8.0"
   },
   "dependencies": {

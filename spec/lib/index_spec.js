@@ -1,6 +1,7 @@
 const router = require('../../lib/index');
 const expect = require('chai').expect;
 const sinon = require('sinon');
+const td = require('testdouble');
 
 describe('router', function () {
     context('help command', () => {
@@ -50,34 +51,46 @@ describe('router', function () {
     });
 
     context('join command', () => {
-        it('should take in a pair name', () => {
-            const mockReq = {
-                query: {
-                    text: 'join pair-name',
-                    user_name: 'some user',
-                    channel_id: '1'
-                }
-            };
-            const mockRes = {
-                send: sinon.mock()
-            };
-            const expectedMessage = 'You have joined the `pair-name` pair.';
-            mockRes.send.once().withArgs(expectedMessage);
+        it('requires a user_name and channel_id', () => {
+          const mockReq = {
+            query: {
+              text: 'join',
+              user_name: 'batman',
+              channel_id: '1'
 
-            router(mockReq, mockRes);
+            }
+          };
+
+          const mockSend = td.function();
+
+          const mockRes = {
+              send: mockSend
+          };
+
+          const expectedMessage = 'You have joined the `batman` pair.';
+
+          router(mockReq, mockRes);
+
+          td.verify(mockSend(expectedMessage));
         });
-        it('should default the pair name to the user name if not provided', () => {
-            const mockReq = {
-                query: {
-                    text: 'join',
-                    user_name: 'some user',
-                    channel_id: '1'
-                }
-            };
-            const mockRes = {
-                send: sinon.mock()
-            };
-            const expectedMessage = 'You have joined the `some user` pair.';
+
+        it('accepts an optional pair name', () => {
+          const mockReq = {
+            query: {
+              text: 'join batcave',
+              user_name: 'batman',
+              channel_id: '1'
+            }
+          };
+
+          const mockSend = td.function();
+
+          const mockRes = {
+              send: mockSend
+          };
+
+          const expectedMessage = 'You have joined the `batcave` pair.';
+
             mockRes.send.once().withArgs(expectedMessage);
 
             router(mockReq, mockRes);
@@ -85,15 +98,66 @@ describe('router', function () {
     });
 
     context('leave command', () => {
-        it('should respond to leave command');
+        it('requires a user_name and channel_id', () => {
+          const mockReq = {
+            query: {
+              text: 'join',
+              user_name: 'batman',
+              channel_id: '1'
+
+            }
+          };
+
+          const mockSend = td.function();
+
+          const mockRes = {
+              send: mockSend
+          };
+
+          const expectedMessage = 'You have left the `batman` pair.';
+
+          router(mockReq, mockRes);
+
+          td.verify(mockSend(expectedMessage));
+        });
+
+      it('removes the user from their current pair in the given channel', () => {
+      });
+
+      it('provides a no-op message when the User is not in a channel', () => {
+      });
+      // commands can all share a common responder which accepts and returns
+      // a `message` (whatever the response body/text is from the command
     });
 
     context('list command', () => {
-        it('should respond to list command');
+      it('requires a channel_id and returns a formatted list of pairs in that channel', () => {
+          const mockReq = {
+            query: {
+              text: 'list',
+              channel_id: '1'
+
+            }
+          };
+
+          const mockSend = td.function();
+
+          const mockRes = {
+              send: mockSend
+          };
+
+          const expectedMessage = 'You have joined the `batman` pair.';
+
+          router(mockReq, mockRes);
+
+          td.verify(mockSend(expectedMessage));
+      });
+
+      it('should respond to list command');
     });
 
     context('default command', () => {
-        it('should default to default message');
+      it('should default to default message');
     });
 });
 
