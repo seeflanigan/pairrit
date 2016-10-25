@@ -42,3 +42,26 @@ This project is the result of conversations between Michael Schoonmaker,
 Jonmichael Chambers, Alexander Deschamps, and Cory Flanigan--the original
 contributors--regarding how to create visibility into the work being done
 by self-organizing teams.
+
+## Thanks
+
+Special thanks to these kind folks, and everyone who contributes time and feedback in testing, pairing, discussing, and inspiring!
+
+(In Alphabetical Order):
+
+* Aaron Dayalan
+* Amit Karunakaran
+* Ivy Reyes
+* Jeffrey Snell
+* Joel Helbling
+* Josh Cheek
+* Justin Searls
+* Michael Ward
+* Michelle Knaub
+* Sergio Prada
+* Thomas Deatherage
+* Todd Kaufman
+* Valerie Burcyznski
+
+* Everyone in the Test Double crew
+* You, for making it all the way through the README! :hifive:
