@@ -1,6 +1,7 @@
 // testing dependencies
-const expect = require('chai').expect;
-const td     = require('testdouble');
+const expect  = require('chai').expect;
+const td      = require('testdouble');
+const Promise = require('bluebird');
 
 // our system under test
 const persistence = require('../../lib/persistence');
@@ -32,9 +33,9 @@ const persistence = require('../../lib/persistence');
 
 describe('Persistence', function() {
   describe('adding a pair to history' , function() {
-    it('persists a pair to the passed in datastore',  function() {
+    it('persists a pair to the passed in datastore',  function(done) {
       const newPair = {
-        channel:      '#gotham',
+        channel_id:   '#gotham',
         sha:          'asdf12345',
         name:         'batcave',
         participants: ['alfred', 'batman', 'you', 'me']
@@ -47,28 +48,33 @@ describe('Persistence', function() {
         saveDoc: mockSaveDoc
       };
 
-      // call our method
-      persistence.setPairs(newPair, mockCollection);
+      td.when(mockSaveDoc(newPair))
+        .thenCallback(null, null);
 
-      // verify db was called as expected
-      td.verify(mockSaveDoc(newPair, td.matchers.isA(Function)));
+      // call our method
+      persistence.setPair(newPair, mockCollection)
+        .then(() => {
+          td.verify(mockSaveDoc(newPair, td.matchers.isA(Function)));
+          done();
+        })
+        .catch(done);
     });
   });
 
   describe('retrieving pairs' , function() {
-    it('returns the result from the call to persistence',  function() {
+    it('returns the result from the call to persistence',  function(done) {
       const mockPairs = [{
-        channel:      '#gotham',
+        channel_id:   '#gotham',
         hash:         'asdf12345',
         name:         'batcave',
         participants: ['alfred', 'batman', 'you', 'me']
       }, {
-        channel:      '#gotham',
+        channel_id:   '#gotham',
         hash:         '0123abcde',
         name:         'wayne-enterprises',
         participants: ['lucius', 'bruce']
       }, {
-        channel:      '#gotham',
+        channel_id:   '#gotham',
         hash:         '12345asdf',
         name:         'arkham',
         participants: ['amadeus', 'jeremiah', 'harleen']
@@ -83,13 +89,16 @@ describe('Persistence', function() {
 
       // figure out how to make a where clause
       // to verify that participants is not null
-      td.when(mockFindDoc(td.matchers.isA(Object))).
-        thenReturn(mockPairs);
+      td.when(mockFindDoc(td.matchers.isA(Object), td.matchers.isA(Object), td.callback)).
+        thenCallback(null, mockPairs);
 
       // call our method
-      var result = persistence.getPairs('gotham', mockCollection);
-
-      expect(result).to.eql(mockPairs);
+      var result = persistence.getPairs('gotham', mockCollection)
+        .then((result) => {
+          expect(result).to.eql(mockPairs);
+          done();
+        })
+        .catch(done);
 
       // maybe move this to a separate test
       // to verify db was called as expected
@@ -101,59 +110,43 @@ describe('Persistence', function() {
 
     });
 
-    it('retreives pairs with participants scoped to a channel', function() {
+    it('retreives pairs with participants scoped to a channel', function(done) {
       // stub out our datastore connection
       var mockFindDoc = td.function()
 
       const mockCollection = {
         findDoc: mockFindDoc
       };
+
+      td.when(mockFindDoc(td.matchers.isA(Object), td.matchers.isA(Object), td.callback)).
+        thenCallback(null, null);
 
       // exercise our code under test
-      persistence.getPairs('gotham', mockCollection);
+      persistence.getPairs('gotham', mockCollection)
+        .then(() => {
+          const scope = {
+            channel_id: 'gotham',
+          };
 
-      // verify our call to persistence binding
-      // with expected attributes
-      const scope = td.matchers.contains({
-        channel: 'gotham'
-      });
-
-      td.verify(mockFindDoc(scope, td.matchers.isA(Function)));
+          td.verify(mockFindDoc(scope, td.matchers.isA(Object), td.matchers.isA(Function)));
+          done();
+        })
+        .catch(done)
     });
 
-    it('only fetches pairs with participants', function() {
-      // stub out our datastore connection
-      var mockFindDoc = td.function()
-
-      const mockCollection = {
-        findDoc: mockFindDoc
-      };
-
-      // exercise code under test
-      persistence.getPairs('gotham', mockCollection);
-
-      // verify our call to persistence binding
-      // with expected attributes
-      const scope = td.matchers.contains({
-        "participants <>": []
-      });
-
-      td.verify(mockFindDoc(scope, td.matchers.isA(Function)));
-    });
-
-    it('returns the most recent state of a specific pair',  function() {
+    it('only fetches pairs with participants', function(done) {
       const mockPairs = [{
-        channel:      '#gotham',
+        channel_id:   '#gotham',
         hash:         'asdf12345',
         name:         'batcave',
         participants: ['alfred', 'batman', 'you', 'me']
       }, {
-        channel:      '#gotham',
+        channel_id:   '#gotham',
         hash:         '0123abcde',
         name:         'wayne-enterprises',
-        participants: ['lucius', 'bruce']
+        participants: []
       }, {
-        channel:      '#gotham',
+        channel_id:   '#gotham',
         hash:         '12345asdf',
         name:         'arkham',
         participants: ['amadeus', 'jeremiah', 'harleen']
@@ -168,22 +161,16 @@ describe('Persistence', function() {
 
       // figure out how to make a where clause
       // to verify that participants is not null
-      td.when(mockFindDoc(td.matchers.isA(Object))).
-        thenReturn(mockPairs);
+      td.when(mockFindDoc(td.matchers.isA(Object), td.matchers.isA(Object), td.callback)).
+        thenCallback(null, mockPairs);
 
-      // call our method
-      var result = persistence.getPair(key, mockCollection);
-
-      expect(result).to.eql(mockPairs);
-
-      // maybe move this to a separate test
-      // to verify db was called as expected
-      // (with the where clause)
-      // and make the 'returns pairs'
-      // test verify that we return whatever
-      // comes back from the mocked out call
-      // here
-
+      // exercise code under test
+      persistence.getPairs('#gotham', mockCollection)
+        .then((pairs) => {
+          expect(pairs.length).to.eql(2);
+          done();
+        })
+        .catch(done);
     });
   });
 });
