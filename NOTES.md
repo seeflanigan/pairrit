@@ -104,3 +104,24 @@
 // invokes a side effect to record a 'join' event for analytics
 // always returns a pair
 
+
+  // DESIGN CONSIDERATIONS:
+  //
+  // how do we get the other params into options?
+  // should we just pass params through after all?
+  // (eg to the controller)
+  // something has to parse out the stuff we want
+  // and pass the correct args to the command
+  // but this can happen at the controller level
+  // where the controller can select defaults
+  // or the underlying libs can select defaults
+  // join, leave, and list all care about channel_id, user_name
+  // and possibly a higher-level unique namespace
+  // (eg domain/team_id) - these all should be part of the hash
+
+  //
+  // call the command and pass in the options
+  // we aren't currently doing anything with the channel_id
+  // but we should probably store that on the pair
+  // and make that part of the hash
+  //
