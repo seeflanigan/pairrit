@@ -22,7 +22,7 @@ describe('Join Controller', function() {
     body.user_name = 'alfred';
     body.text = 'join';
 
-    td.when(pairrit.leaveAll('alfred', 'ABC')).thenReturn(Promise.resolve());
+    td.when(pairrit.leave('alfred', 'ABC')).thenReturn(Promise.resolve());
     td.when(pairrit.join('alfred', 'alfred', 'ABC')).thenReturn(Promise.resolve());
     td.when(mockResponse.send('Welcome to the `alfred` pair!'));
 
@@ -35,7 +35,7 @@ describe('Join Controller', function() {
     body.user_name = 'alfred';
     body.text = 'join batcave';
 
-    td.when(pairrit.leaveAll('alfred', 'ABC')).thenReturn(Promise.resolve());
+    td.when(pairrit.leave('alfred', 'ABC')).thenReturn(Promise.resolve());
     td.when(pairrit.join('alfred', 'batcave', 'ABC')).thenReturn(Promise.resolve());
     td.when(mockResponse.send('Welcome to the `batcave` pair!'));
 

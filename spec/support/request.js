@@ -37,6 +37,26 @@ function sendJoinRequest(channel_id, user_name, pair_name) {
   })
 }
 
+function sendLeaveRequest(channel_id, user_name) {
+  const requestParams = _.assign(baseRequest, {
+    channel_id: channel_id,
+    user_name: user_name,
+    text: 'leave'
+  });
+
+  return new Promise((resolve, reject) => {
+    request(app)
+      .post('/')
+      .type('application/x-www-form-urlencoded')
+      .set('Accept', 'application/json')
+      .send(requestParams)
+      .end(function(err, res) {
+        if (err) return reject(err);
+        resolve(res)
+       });
+  })
+}
+
 function sendListRequest(channel_id) {
   const listParams = {
     token:         'gIkuvaNzQIHg97ATvDxqgjtO',
@@ -67,5 +87,6 @@ function sendListRequest(channel_id) {
 module.exports = {
   baseRequest: baseRequest,
   sendJoinRequest: sendJoinRequest,
+  sendLeaveRequest: sendLeaveRequest,
   sendListRequest: sendListRequest
 }
