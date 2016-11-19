@@ -7,7 +7,7 @@ const db              = require('../../lib/pairrit').db;
 
 describe('POST with `join` command', () => {
   beforeEach(() => {
-    db.run('truncate table pairs', () => {})
+    db.raw('truncate table pairs').then(() => {})
   });
 
   it('accepts content type and returns json', (done) => {

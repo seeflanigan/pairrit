@@ -8,7 +8,7 @@ const db  = require('../../lib/pairrit').db;
 
 describe('Listing Pairs', () => {
   beforeEach(() => {
-    db.run('truncate table pairs', () => {})
+    db.raw('truncate table pairs').then(() => {})
   });
 
   it('responds with a message if there are no pairs', (done) => {
