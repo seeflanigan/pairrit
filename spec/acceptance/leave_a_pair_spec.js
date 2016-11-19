@@ -9,6 +9,19 @@ describe('POST with `leave` command', () => {
     db.raw('truncate table pairs').then(() => {})
   });
 
+  context('not in a pair', () => {
+    it('returns an error message', (done) => {
+      sendLeaveRequest('ABC', 'alfred')
+        .then((res) => {
+          expect(res.statusCode).to.eql(200);
+          expect(res.text).to.eql('You are not currently in a pair. Use `/pair join` to join one!');
+
+          done();
+        })
+        .catch(done);
+    })
+  })
+
   it('removes you from a pair', (done) => {
     sendJoinRequest('ABC', 'alfred', 'batcave')
       .then((res) => {
