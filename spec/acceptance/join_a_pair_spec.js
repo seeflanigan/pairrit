@@ -18,9 +18,7 @@ describe('POST with `join` command', () => {
 
         done();
       })
-      .catch((err) => {
-        done(err);
-      });
+      .catch(done);
   });
 
   it('respects a channel name option', (done) => {
@@ -31,9 +29,7 @@ describe('POST with `join` command', () => {
 
         done();
       })
-      .catch((err) => {
-        done(err);
-      });
+      .catch(done);
   });
 
   it('adds you to an existing pair', (done) => {
@@ -66,13 +62,41 @@ describe('POST with `join` command', () => {
 
         done();
       })
-      .catch((err) => {
-        done(err);
-      });
+      .catch(done);
   });
 
 
   it('implicitly removes you from a pair if you join another', (done) => {
-    done();
+    sendJoinRequest('ABC', 'alfred', 'batcave')
+      .then((res) => {
+        expect(res.statusCode).to.eql(200);
+        expect(res.text).to.eql('Welcome to the `batcave` pair!');
+
+        return sendJoinRequest('ABC', 'alfred', 'wayne-enterprises');
+      })
+      .then((res) => {
+        expect(res.statusCode).to.eql(200);
+        expect(res.text).to.eql('Welcome to the `wayne-enterprises` pair!');
+      })
+      .then(() => {
+        return sendListRequest('ABC');
+      })
+      .then((res) => {
+        const expectedResponse = {
+          "response_type": "in_channel",
+          "text":          "The following pairs are in progress:",
+          "attachments": [{
+            "fallback": "",
+            "title":    "wayne-enterprises (1 participant)",
+            "text":     "alfred"
+          }]
+        };
+
+        expect(res.statusCode).to.eql(200);
+        expect(JSON.parse(res.text)).to.eql(expectedResponse);
+
+        done();
+      })
+      .catch(done);
   });
 });

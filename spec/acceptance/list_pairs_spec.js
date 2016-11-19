@@ -21,9 +21,7 @@ describe('Listing Pairs', () => {
 
         done();
       })
-      .catch((err) => {
-        done(err);
-      });
+      .catch(done);
   });
 
   it('returns a pair with at least one participant', (done) => {
@@ -48,9 +46,7 @@ describe('Listing Pairs', () => {
 
         done();
       })
-      .catch((err) => {
-        done(err);
-      });
+      .catch(done);
   });
 
   it('only returns the most recent copy of a pair', (done) => {
@@ -93,8 +89,6 @@ describe('Listing Pairs', () => {
         expect(res.text).to.eql(JSON.stringify(expectedResponse));
         done();
       })
-      .catch((err) => {
-        done(err);
-      });
+      .catch(done);
   });
 });

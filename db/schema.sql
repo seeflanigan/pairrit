@@ -7,6 +7,7 @@
 //
 // http://www.starkandwayne.com/blog/uuid-primary-keys-in-postgresql/
 */
+DROP DATABASE IF EXISTS pairrit;
 CREATE DATABASE pairrit;
 
 \c pairrit
@@ -14,11 +15,10 @@ CREATE DATABASE pairrit;
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE TABLE pairs(
-  id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  body       jsonb,
-  search     tsvector,
-  created_at timestamptz default now()
+  id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  hash         varchar,
+  name         varchar,
+  channel_id   varchar,
+  participants text[] default '{}',
+  created_at   timestamptz default now()
 );
-CREATE INDEX idx_pairs        on pairs using GIN(body jsonb_path_ops);
-CREATE INDEX idx_pairs_search on pairs using GIN(search);
-

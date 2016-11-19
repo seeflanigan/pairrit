@@ -45,7 +45,7 @@ describe('Persistence', function() {
       var mockSaveDoc = td.function()
 
       const mockCollection = {
-        saveDoc: mockSaveDoc
+        save: mockSaveDoc
       };
 
       td.when(mockSaveDoc(newPair))
@@ -84,7 +84,7 @@ describe('Persistence', function() {
       var mockFindDoc = td.function()
 
       const mockCollection = {
-        findDoc: mockFindDoc
+        find: mockFindDoc
       };
 
       // figure out how to make a where clause
@@ -115,7 +115,7 @@ describe('Persistence', function() {
       var mockFindDoc = td.function()
 
       const mockCollection = {
-        findDoc: mockFindDoc
+        find: mockFindDoc
       };
 
       td.when(mockFindDoc(td.matchers.isA(Object), td.matchers.isA(Object), td.callback)).
@@ -125,7 +125,7 @@ describe('Persistence', function() {
       persistence.getPairs('gotham', mockCollection)
         .then(() => {
           const scope = {
-            channel_id: 'gotham',
+            channel_id: 'gotham'
           };
 
           td.verify(mockFindDoc(scope, td.matchers.isA(Object), td.matchers.isA(Function)));
@@ -156,7 +156,7 @@ describe('Persistence', function() {
       var mockFindDoc = td.function()
 
       const mockCollection = {
-        findDoc: mockFindDoc
+        find: mockFindDoc
       };
 
       // figure out how to make a where clause
