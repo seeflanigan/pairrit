@@ -1,18 +1,15 @@
 class Command::List
   include ActionView::Helpers::TextHelper
 
-  attr_reader :params
+  attr_reader :channel, :params
 
   def initialize(params)
+    @channel = params['channel']
     @params = params
   end
 
   def process
-    pairs = Pair.where(channel_id: params['channel_id'])
-      .order('created_at DESC')
-      .to_a
-      .uniq { |x| x.name }
-      .select { |x| x.participants.any? }
+    pairs = channel.active_pairs.to_a.uniq { |x| x.name }
 
     if pairs.any?
       message = {

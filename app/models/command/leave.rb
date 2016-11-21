@@ -7,8 +7,8 @@ class Command::Leave
   end
 
   def process
-    if user.pair
-      pair = user.leave!
+    if user.has_pair?(params['channel'])
+      pair = user.leave!(params['channel'])
 
       { text: "You have left the `#{pair.name}` pair." }
     else

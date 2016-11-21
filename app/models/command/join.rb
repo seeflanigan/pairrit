@@ -8,9 +8,11 @@ class Command::Join
   end
 
   def process
-    pair = user.join!(params)
+    ActiveRecord::Base.transaction do
+      pair = user.join!(params)
 
-    { text: "Welcome to the `#{pair.name}` pair!" }
+      { text: "Welcome to the `#{pair.name}` pair!" }
+    end
   end
 
   private

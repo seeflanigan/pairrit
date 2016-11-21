@@ -1,8 +1,12 @@
 class Pair < ApplicationRecord
+  belongs_to :channel
+
+  has_many :users, through: :pairs_users
+  has_many :pairs_users
+
   def self.fetch(params)
     name = params['arg'] || params['user_name']
-    pair = Pair.order('created_at DESC').lock(true).find_or_initialize_by(channel_id: params['channel_id'], name: name) do |pair|
-      pair.channel_name = params['channel_name']
+    pair = Pair.order('created_at DESC').lock(true).find_or_initialize_by(channel: params['channel'], name: name) do |pair|
     end
 
     if pair.id?
@@ -20,10 +24,6 @@ class Pair < ApplicationRecord
   def remove(id)
     participants.delete(id)
     save
-  end
-
-  def users
-    User.where(id: self.participants)
   end
 
   def user_names

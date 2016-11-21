@@ -21,6 +21,7 @@ class Command
     handler = self.class.get(command)
 
     params['team'] = Team.fetch(params)
+    params['channel'] = Channel.fetch(params)
     params['user'] = User.fetch(params)
 
     if handler
