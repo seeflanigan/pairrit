@@ -16,19 +16,19 @@ ActiveRecord::Schema.define(version: 20161121193640) do
   enable_extension "plpgsql"
 
   create_table "channels", force: :cascade do |t|
-    t.string  "name"
-    t.string  "slack_id"
-    t.integer "team_id"
-    t.index ["slack_id"], name: "index_channels_on_slack_id", using: :btree
+    t.string  "name",     null: false
+    t.string  "slack_id", null: false
+    t.integer "team_id",  null: false
+    t.index ["slack_id"], name: "index_channels_on_slack_id", unique: true, using: :btree
     t.index ["team_id"], name: "index_channels_on_team_id", using: :btree
   end
 
   create_table "pairs", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",                      null: false
     t.integer  "participants", default: [],              array: true
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
-    t.integer  "channel_id"
+    t.integer  "channel_id",                null: false
     t.index ["channel_id"], name: "index_pairs_on_channel_id", using: :btree
     t.index ["name"], name: "index_pairs_on_name", using: :btree
     t.index ["participants"], name: "index_pairs_on_participants", using: :btree
@@ -40,15 +40,15 @@ ActiveRecord::Schema.define(version: 20161121193640) do
   end
 
   create_table "teams", force: :cascade do |t|
-    t.string "domain"
-    t.string "slack_id"
+    t.string "domain",   null: false
+    t.string "slack_id", null: false
     t.index ["slack_id"], name: "index_teams_on_slack_id", unique: true, using: :btree
   end
 
   create_table "users", force: :cascade do |t|
-    t.string  "name"
-    t.string  "slack_id"
-    t.integer "team_id"
+    t.string  "name",     null: false
+    t.string  "slack_id", null: false
+    t.integer "team_id",  null: false
     t.index ["slack_id"], name: "index_users_on_slack_id", unique: true, using: :btree
     t.index ["team_id"], name: "index_users_on_team_id", using: :btree
   end

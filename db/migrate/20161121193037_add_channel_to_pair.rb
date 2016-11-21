@@ -1,5 +1,5 @@
 class AddChannelToPair < ActiveRecord::Migration[5.0]
   def change
-    add_reference :pairs, :channel, foreign_key: true
+    add_reference :pairs, :channel, foreign_key: true, null: false
   end
 end

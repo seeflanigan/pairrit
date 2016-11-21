@@ -4,10 +4,11 @@ class Pair < ApplicationRecord
   has_many :users, through: :pairs_users
   has_many :pairs_users
 
+  has_one :team, through: :channel
+
   def self.fetch(params)
     name = params['arg'] || params['user_name']
-    pair = Pair.order('created_at DESC').lock(true).find_or_initialize_by(channel: params['channel'], name: name) do |pair|
-    end
+    pair = Pair.order('created_at DESC').lock(true).find_or_initialize_by(channel: params['channel'], name: name)
 
     if pair.id?
       pair.dup

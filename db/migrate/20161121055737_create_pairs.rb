@@ -1,7 +1,7 @@
 class CreatePairs < ActiveRecord::Migration[5.0]
   def change
     create_table :pairs do |t|
-      t.string :name
+      t.string :name, null: false
       t.string :channel_name
       t.string :channel_id
       t.string :team_id
