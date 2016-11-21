@@ -6,7 +6,7 @@ module PairRequest
       command: '/pair',
       name: 'batcave',
       team_id: 'DEF',
-      team_name: 'Justice League',
+      team_domain: 'justice',
       user_id: 'XYZ',
       user_name: 'batman'
     }.merge(opts)
