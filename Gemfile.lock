@@ -48,6 +48,8 @@ GEM
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     i18n (0.7.0)
+    levenshtein-ffi (1.1.0)
+      ffi (~> 1.9)
     listen (3.0.8)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -138,6 +140,7 @@ PLATFORMS
 
 DEPENDENCIES
   byebug
+  levenshtein-ffi
   listen (~> 3.0.5)
   pg
   puma (~> 3.0)
