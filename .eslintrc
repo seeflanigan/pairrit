@@ -1,0 +1,16 @@
+{
+  "extends": "airbnb",
+    "rules": {
+      strict: ['error', 'safe'],
+
+      arrow-body-style: ['error', 'as-needed'],
+      arrow-parens: ["error", "always"],
+      func-names: ["error", "as-needed"],
+      key-spacing: ["error", { align: "value" }],
+      newline-per-chained-call: "error",
+      no-multi-spaces: "error",
+      prefer-template: "error",
+      quotes: ["error", "double"],
+      semi: "error"
+    }
+}
