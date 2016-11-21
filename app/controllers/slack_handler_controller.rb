@@ -1,5 +1,5 @@
 class SlackHandlerController < ApplicationController
   def index
-    render json: CommandHandler.new(params).process
+    render json: Command.new(params).process
   end
 end
