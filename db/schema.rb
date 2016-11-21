@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161121055737) do
+ActiveRecord::Schema.define(version: 20161121184106) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 20161121055737) do
     t.string   "channel_id"
     t.string   "team_id"
     t.string   "team_domain"
-    t.string   "participants", default: [],              array: true
+    t.integer  "participants", default: [],              array: true
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
     t.index ["channel_id"], name: "index_pairs_on_channel_id", using: :btree
@@ -29,4 +29,22 @@ ActiveRecord::Schema.define(version: 20161121055737) do
     t.index ["participants"], name: "index_pairs_on_participants", using: :btree
   end
 
+  create_table "teams", force: :cascade do |t|
+    t.string "domain"
+    t.string "slack_id"
+    t.index ["slack_id"], name: "index_teams_on_slack_id", unique: true, using: :btree
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string  "name"
+    t.string  "slack_id"
+    t.integer "team_id"
+    t.integer "pair_id"
+    t.index ["pair_id"], name: "index_users_on_pair_id", using: :btree
+    t.index ["slack_id"], name: "index_users_on_slack_id", unique: true, using: :btree
+    t.index ["team_id"], name: "index_users_on_team_id", using: :btree
+  end
+
+  add_foreign_key "users", "pairs"
+  add_foreign_key "users", "teams"
 end

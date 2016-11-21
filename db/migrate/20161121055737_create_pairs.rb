@@ -6,7 +6,7 @@ class CreatePairs < ActiveRecord::Migration[5.0]
       t.string :channel_id
       t.string :team_id
       t.string :team_domain
-      t.string :participants, array: true, default: []
+      t.integer :participants, array: true, default: []
 
       t.timestamps
     end
