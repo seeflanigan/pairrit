@@ -5,8 +5,8 @@ describe Command, type: :model do
     it 'returns a helpful response' do
       response = {
         text: [
-          "Sorry, I'm not familiar with the `joi` command.",
-          "Perhaps you meant to type `join` instead?"
+          "Sorry, I'm not familiar with the `/pair joi` command.",
+          "Perhaps you meant to type `/pair join` instead?"
         ].join("\n")
       }
 

@@ -31,8 +31,8 @@ class Command
       handler.new(params).process
     else
       text = [
-        "Sorry, I'm not familiar with the `#{command}` command.",
-        "Perhaps you meant to type `#{get_best_guess}` instead?"
+        "Sorry, I'm not familiar with the `/pair #{command}` command.",
+        "Perhaps you meant to type `/pair #{get_best_guess}` instead?"
       ]
 
       { text: text.join("\n") }
