@@ -16,8 +16,8 @@ class Command
   attr_reader :command, :params
 
   def initialize(params)
-    @command = params['text'].split(' ').first
     @params = params
+    @command, @params['args'] = parse_command(params['text'])
   end
 
   def process
@@ -46,7 +46,7 @@ class Command
   end
 
   def parse_command(text)
-    command, arg = text.split(' ')
-    [command.downcase, arg]
+    command, *args = text.split(' ')
+    [command.downcase, args]
   end
 end
