@@ -21,7 +21,7 @@ class Command::Join
   def pair_name
     name = params['user_name']
 
-    if params['args']
+    if params['args'].any?
       name = params['args'].first
     end
 
