@@ -13,23 +13,15 @@ class Pair < ApplicationRecord
       name = params['args'].first
     end
 
-    pair = Pair.order('created_at DESC').lock(true).find_or_initialize_by(channel: params['channel'], name: name)
-
-    if pair.id?
-      pair.dup
-    else
-      pair
-    end
+    Pair.order('created_at DESC').lock(true).find_or_create_by(channel: params['channel'], name: name)
   end
 
-  def add(id)
-    participants.push(id)
-    save
+  def add(user)
+    users.push(user)
   end
 
-  def remove(id)
-    participants.delete(id)
-    save
+  def remove(user)
+    users.delete(user)
   end
 
   def user_names

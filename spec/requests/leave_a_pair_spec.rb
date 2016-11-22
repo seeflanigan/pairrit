@@ -5,7 +5,7 @@ RSpec.describe 'Leave a pair', type: :request do
     team = Team.create(domain: 'justice', slack_id: 'DEF')
     channel = Channel.create(name: 'gotham', team: team, slack_id: 'ABC')
     user = User.create(name: 'batman', slack_id: 'XYZ', team: team)
-    pair = Pair.create(channel: channel, name: 'batcave', participants: [user.id])
+    pair = Pair.create(channel: channel, name: 'batcave')
     pair.users << user
 
     send_request(command: 'leave')
