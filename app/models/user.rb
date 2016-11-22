@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   belongs_to :team
 
+  has_many :events
   has_many :pairs, through: :pairs_users
   has_many :pairs_users
 
@@ -14,27 +15,12 @@ class User < ApplicationRecord
     pairs.find_by(channel: channel)
   end
 
-  def has_pair?(channel)
-    find_pair(channel).present?
-  end
-
-  def join!(params)
-    leave!(params['channel']) if has_pair?(params['channel'])
-
-    new_pair = Pair.fetch(params)
-    new_pair.add(id)
-
-    pairs << new_pair
-
-    new_pair
-  end
-
-  def leave!(channel)
+  def leave(channel)
     pair = find_pair(channel)
-    pair.users.delete(id)
 
-    new_pair = pair.dup
-    new_pair.remove(id)
-    new_pair
+    if pair
+      pair.remove(self)
+      pair
+    end
   end
 end

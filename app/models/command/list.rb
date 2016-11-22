@@ -18,7 +18,7 @@ class Command::List
         attachments: pairs.map do |pair|
           {
             fallback: '',
-            title: "#{pair.name} (#{pluralize(pair.participants.size, 'participant')})",
+            title: "#{pair.name} (#{pluralize(pair.users.size, 'participant')})",
             text: pair.user_names.join(', ')
           }
         end

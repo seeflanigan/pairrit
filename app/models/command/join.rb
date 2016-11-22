@@ -1,16 +1,30 @@
 class Command::Join
-  attr_reader :params, :user
+  attr_reader :channel, :params, :user
 
   def initialize(params)
     @params = params
+    @channel = params['channel']
     @user = params['user']
   end
 
   def process
-    ActiveRecord::Base.transaction do
-      pair = user.join!(params)
+    user.leave(channel)
 
-      { text: "Welcome to the `#{pair.name}` pair!" }
+    pair = Pair.find_or_create_by(channel: channel, name: pair_name)
+    pair.add(user)
+
+    { text: "Welcome to the `#{pair.name}` pair!" }
+  end
+
+  private
+
+  def pair_name
+    name = params['user_name']
+
+    if params['args']
+      name = params['args'].first
     end
+
+    name
   end
 end

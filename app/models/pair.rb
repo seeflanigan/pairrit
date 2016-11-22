@@ -1,30 +1,20 @@
 class Pair < ApplicationRecord
   belongs_to :channel
 
-  has_many :users, through: :pairs_users
+  has_many :events
   has_many :pairs_users
+  has_many :users, through: :pairs_users
 
   has_one :team, through: :channel
 
-  def self.fetch(params)
-    name = params['text'].split(' ').second || params['user_name']
-    pair = Pair.order('created_at DESC').lock(true).find_or_initialize_by(channel: params['channel'], name: name)
-
-    if pair.id?
-      pair.dup
-    else
-      pair
-    end
+  def add(user)
+    users.push(user)
+    events.create(action: :join, user: user)
   end
 
-  def add(id)
-    participants.push(id)
-    save
-  end
-
-  def remove(id)
-    participants.delete(id)
-    save
+  def remove(user)
+    users.delete(user)
+    events.create(action: :leave, user: user)
   end
 
   def user_names
