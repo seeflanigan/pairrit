@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   belongs_to :team
 
+  has_many :events
   has_many :pairs, through: :pairs_users
   has_many :pairs_users
 
