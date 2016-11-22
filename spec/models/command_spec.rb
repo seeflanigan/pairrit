@@ -1,11 +1,8 @@
-require 'spec_helper'
-require './app/models/command'
+require 'rails_helper'
 
 describe Command, type: :model do
   context 'with an invalid command' do
     it 'returns a helpful response' do
-      Command.add('join', '')
-
       response = {
         text: [
           "Sorry, I'm not familiar with the `joi` command.",

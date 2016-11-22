@@ -7,7 +7,7 @@ class Pair < ApplicationRecord
   has_one :team, through: :channel
 
   def self.fetch(params)
-    name = params['arg'] || params['user_name']
+    name = params['text'].split(' ').second || params['user_name']
     pair = Pair.order('created_at DESC').lock(true).find_or_initialize_by(channel: params['channel'], name: name)
 
     if pair.id?
