@@ -1,13 +1,15 @@
 source 'https://rubygems.org'
-ruby '2.3.2'
+ruby '2.3.3'
 
-gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
+gem 'levenshtein-ffi', :require => 'levenshtein'
+gem 'httparty'
 gem 'puma', '~> 3.0'
 gem 'pg'
-gem 'levenshtein-ffi', :require => 'levenshtein'
+gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
 
 group :development, :test do
   gem 'byebug', platform: :mri
+  gem 'dotenv-rails'
   gem 'rspec-rails', '~> 3.5'
 end
 

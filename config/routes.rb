@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  post '/', to: 'slack_handler#index'
+  post '/slack', to: 'slack#handle'
+  get '/slack/auth', to: 'slack#create'
 end

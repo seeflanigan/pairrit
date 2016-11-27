@@ -13,6 +13,6 @@ module PairRequest
 
     data[:text] = command
 
-    post '/', params: data
+    post '/slack', params: data
   end
 end
