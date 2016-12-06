@@ -13,7 +13,7 @@ class Command::List
 
     if pairs.any?
       message = {
-        response_type: 'in_channel',
+        response_type: 'ephemeral',
         text: 'The following pairs are in progress:',
         attachments: pairs.map do |pair|
           {
