@@ -1,4 +1,4 @@
-class Command::Join
+class Command::Join < Command::Base
   attr_reader :channel, :params, :user
 
   def initialize(params)

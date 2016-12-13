@@ -1,4 +1,4 @@
-class Command::List
+class Command::List < Command::Base
   include ActionView::Helpers::TextHelper
 
   attr_reader :channel, :params

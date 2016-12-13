@@ -1,4 +1,4 @@
-class Command::Leave
+class Command::Leave < Command::Base
   attr_reader :channel, :params, :user
 
   def initialize(params)
